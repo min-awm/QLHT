@@ -113,7 +113,7 @@ public class TimeTable extends AppCompatActivity {
 
             while (cursor.moveToNext()) {
                 tb_id.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-                tb_mon.add(cursor.getString(cursor.getColumnIndexOrThrow("tenHp"))); // Sử dụng tenHp thay vì maLop
+                tb_mon.add(cursor.getString(cursor.getColumnIndexOrThrow("mon")));
                 tb_thu.add(cursor.getString(cursor.getColumnIndexOrThrow("thu")));
                 tb_ngay.add(cursor.getString(cursor.getColumnIndexOrThrow("ngay")));
                 tb_giangvien.add(cursor.getString(cursor.getColumnIndexOrThrow("giangVien")));
@@ -135,7 +135,7 @@ public class TimeTable extends AppCompatActivity {
         } else {
             while (cursor.moveToNext()) {
                 tb_id.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-                tb_mon.add(cursor.getString(cursor.getColumnIndexOrThrow("tenHp"))); // Sử dụng tenHp thay vì maLop
+                tb_mon.add(cursor.getString(cursor.getColumnIndexOrThrow("mon"))); // Sử dụng tenHp thay vì maLop
                 tb_thu.add(cursor.getString(cursor.getColumnIndexOrThrow("thu")));
                 tb_ngay.add(cursor.getString(cursor.getColumnIndexOrThrow("ngay")));
                 tb_giangvien.add(cursor.getString(cursor.getColumnIndexOrThrow("giangVien")));

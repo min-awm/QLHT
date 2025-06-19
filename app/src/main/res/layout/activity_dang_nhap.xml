@@ -132,17 +132,6 @@
                 android:textStyle="bold"
                 app:backgroundTint="@null" />
 
-            <Button
-                android:id="@+id/btnDangKy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_login"
-                android:text="Đăng Ký"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:backgroundTint="@null" />
         </TableRow>
 
         <TextView
@@ -150,7 +139,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="Quên mật khẩu"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="14sp" />

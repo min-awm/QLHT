@@ -81,7 +81,10 @@ public class CongViecActivity extends AppCompatActivity {
                 showAddEditDialog(null, 0);
             }
         });
-        back.setOnClickListener(v -> finish());
+        back.setOnClickListener(v -> {
+            setResult(1, null);
+            finish();
+        });
         mucUuTienList.add("Không quan trọng");
         mucUuTienList.add("Quan trọng");
         mucUuTienList.add("Rất quan trọng");
