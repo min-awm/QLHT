@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:height="1dp" />
+    <solid android:color="#00E0E0E0" /> <!-- Màu của divider -->
+</shape>

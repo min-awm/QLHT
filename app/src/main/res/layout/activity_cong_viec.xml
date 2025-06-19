@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DEFCF9"
+    android:orientation="vertical"
+    tools:context=".cong_viec.CongViecActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <ImageView
+            android:id="@+id/btn_backtrangchu"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:background="@drawable/back">
+
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:gravity="center_horizontal"
+            android:text="Công Việc"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_menu"
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="20px"
+            android:background="@drawable/plus" />
+    </LinearLayout>
+
+    <android.widget.SearchView
+        android:id="@+id/searchCv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/main1_button_background"
+        android:queryHint="Tìm kiếm..." />
+
+    <ListView
+        android:id="@+id/lvcongviec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="30px"
+        android:layout_marginRight="20px"
+        android:divider="@drawable/divider"
+        android:dividerHeight="50px"
+        android:scrollbars="none"
+        tools:listitem="@layout/customlv_cong_viec">
+
+    </ListView>
+
+</LinearLayout>

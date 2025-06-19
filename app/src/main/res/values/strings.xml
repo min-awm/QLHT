@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">BTL_Android</string>
+    <string-array name="semester_array">
+        <item>Kỳ 1</item>
+        <item>Kỳ 2</item>
+        <item>Kỳ 3</item>
+        <item>Kỳ 4</item>
+        <item>Kỳ 5</item> 
+        <item>Kỳ 6</item>
+        <item>Kỳ 7</item>
+        <item>Kỳ 8</item>
+    </string-array>
+    <string-array name="exam_type_array">
+        <item>Loại thi</item>
+        <item>Thực hành</item>
+        <item>Bài tập</item>
+        <!-- Thêm các loại thi khác nếu cần -->
+    </string-array>
+
+</resources>
+
+

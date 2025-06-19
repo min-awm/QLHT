@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DEFCF9"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm công việc"
+        android:textAlignment="center"
+        android:textSize="70px"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="20px"
+        android:text="Tên công việc: ">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/edt_tenviec"
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="10px"
+        android:layout_marginRight="20px"
+        android:background="@drawable/custom_edittext"
+        android:paddingHorizontal="5dp">
+
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:weightSum="8">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:layout_weight="3"
+            android:text="Hạn Ngày: ">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/edt_hanngay"
+            android:layout_width="match_parent"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_weight="2"
+            android:background="@drawable/custom_edittext"
+            android:paddingHorizontal="4dp">
+
+        </EditText>
+
+        <Button
+            android:id="@+id/btn_daypick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="20px"
+            android:layout_weight="3"
+            android:backgroundTint="#B79A81"
+            android:text="Chọn"
+            android:textSize="30px" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:weightSum="8">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:layout_weight="3"
+            android:text="Hạn Giờ: ">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/edt_hangio"
+            android:layout_width="match_parent"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_weight="2"
+            android:background="@drawable/custom_edittext"
+            android:paddingHorizontal="5dp">
+
+        </EditText>
+
+        <Button
+            android:id="@+id/btn_timepick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="20px"
+            android:layout_weight="3"
+            android:backgroundTint="#B79A81"
+            android:text="Chọn"
+            android:textSize="30px" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="20px"
+            android:layout_weight="2"
+            android:text="Mức ưu tiên: ">
+
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spn_mucuutien"
+            android:layout_width="match_parent"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="20px"
+            android:layout_marginRight="20px"
+            android:layout_weight="1">
+
+        </Spinner>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="20px"
+        android:text="Mô tả chi tiết: ">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/edt_chitiet"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="20px"
+        android:layout_marginRight="20px"
+        android:background="@drawable/custom_edittext"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:paddingHorizontal="5dp" />
+
+</LinearLayout>

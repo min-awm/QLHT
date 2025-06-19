@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+ 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/app_icon"
+        android:label="QLHT"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BTL_Android"
+        tools:targetApi="31">
+        <activity
+            android:name=".lich_hoc.Update_Timetable"
+            android:exported="false"
+            android:parentActivityName=".lich_hoc.TimeTable" />
+        <activity
+            android:name=".lich_hoc.Add_Timetable"
+            android:exported="false" />
+        <activity
+            android:name=".lich_hoc.TimeTable"
+            android:exported="false"
+            android:parentActivityName=".dang_nhap.TrangChuActivity" />
+        <activity
+            android:name=".thong_bao.ThongBaoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dang_nhap.DangKyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".hoc_phan_du_kien.ThemHocPhan"
+            android:exported="false" />
+        <activity
+            android:name=".hoc_phan_du_kien.HocPhanDuKienActivity"
+            android:exported="false" />
+        <activity
+            android:name=".diem.CapNhatDiemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".diem.ThongKeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".diem.DiemChiTietActivity"
+            android:exported="false" />
+        <activity
+            android:name=".diem.DiemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".cong_viec.CongViecActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dang_nhap.TrangChuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dang_nhap.DangNhapActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+
+</manifest>
+
+
+
+
+
