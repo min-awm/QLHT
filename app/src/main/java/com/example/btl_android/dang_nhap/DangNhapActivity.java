@@ -29,7 +29,8 @@ public class DangNhapActivity extends AppCompatActivity {
 
     List<Diem> diemList;
     SQLiteDatabase db;
-    private Button btnDangNhap, btnDangKy;
+    private Button btnDangNhap;
+    private Button btnDangKy;
     private EditText etTenTk, etMatKhau;
     private CheckBox cbLuuThongTin;
     private DatabaseHelper dbHelper;
@@ -44,7 +45,7 @@ public class DangNhapActivity extends AppCompatActivity {
         db = dbHelper.getWritableDatabase();
 
         btnDangNhap = this.findViewById(R.id.btnDangNhap);
-        btnDangKy = this.findViewById(R.id.btnDangKy);
+//        btnDangKy = this.findViewById(R.id.btnDangKy);
         etTenTk = this.findViewById(R.id.editTenTk);
         etMatKhau = this.findViewById(R.id.editPassword);
         cbLuuThongTin = findViewById(R.id.chkLuuThongTin);
@@ -52,8 +53,8 @@ public class DangNhapActivity extends AppCompatActivity {
 
         loadCredentials();
 
-        Intent intentDangKy = new Intent(this, DangKyActivity.class);
-        btnDangKy.setOnClickListener(v -> DangNhapActivity.this.startActivity(intentDangKy));
+//        Intent intentDangKy = new Intent(this, DangKyActivity.class);
+//        btnDangKy.setOnClickListener(v -> DangNhapActivity.this.startActivity(intentDangKy));
         DANG_NHAP();
     }
 

@@ -19,8 +19,7 @@ import com.example.btl_android.R;
 public class DiemChiTietActivity extends AppCompatActivity {
     private ImageButton btnQuayLai;
     private TextView tvTenHp, tvMaHp, tvSoTc, tvHinhThucThi, tvLop, tvHeSo,
-            tvTx1, tvTx2, tvGiuaKy, tvCuoiKy, tvKiVong, tvDiem10, tvDiem4, tvDiemChu,
-            tvXepLoai, tvNghiLt, tvNghiTh, tvDieuKien;
+            tvTx1, tvTx2, tvGiuaKy, tvCuoiKy, tvKiVong, tvDiem10, tvDiem4, tvDiemChu, tvXepLoai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +54,6 @@ public class DiemChiTietActivity extends AppCompatActivity {
         tvDiem4 = findViewById(R.id.tvDiem4);
         tvDiemChu = findViewById(R.id.tvDiemChu);
         tvXepLoai = findViewById(R.id.tvXepLoai);
-        tvNghiLt = findViewById(R.id.tvNghiLt);
-        tvNghiTh = findViewById(R.id.tvNghiTh);
-        tvDieuKien = findViewById(R.id.tvDieuKien);
     }
 
     private void displayDiemChiTiet() {
@@ -84,8 +80,5 @@ public class DiemChiTietActivity extends AppCompatActivity {
         tvDiem4.setText(diem.getDiem4() != null ? String.format("%.1f", diem.getDiem4()) : "-");
         tvDiemChu.setText(diem.getDiemChu() != null ? diem.getDiemChu() : "-");
         tvXepLoai.setText(diem.getXepLoai());
-        tvNghiLt.setText(String.valueOf(diem.getVangLt() * 2));
-        tvNghiTh.setText(String.valueOf(diem.getVangTh() * 3));
-        tvDieuKien.setText(diem.getDieuKien());
     }
 }

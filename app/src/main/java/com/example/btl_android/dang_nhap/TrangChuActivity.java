@@ -28,6 +28,8 @@ import com.example.btl_android.thong_bao.ThongBaoActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -69,7 +71,11 @@ public class TrangChuActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        lichHocList = dbHelper.getLichHocLite("2024-06-19");
+        LocalDate today = LocalDate.now();  // Lấy ngày hôm nay
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String formattedDate = today.format(formatter);
+        lichHocList = dbHelper.getLichHocLite(formattedDate);
         showlvLichHoc();
 
         congViecList = dbHelper.getAllCongViec(getIntent().getStringExtra("MaSv"));
@@ -80,7 +86,7 @@ public class TrangChuActivity extends AppCompatActivity {
             Intent intent = new Intent(TrangChuActivity.this, CongViecActivity.class);
             intent.putExtra("MaSv", getIntent().getStringExtra("MaSv"));
             intent.putExtra("TenSv", getIntent().getStringExtra("TenSv"));
-            startActivity(intent);
+            startActivityForResult(intent, 2);
         });
 
         btnDiem.setOnClickListener(v -> {
@@ -114,6 +120,11 @@ public class TrangChuActivity extends AppCompatActivity {
         }
         if (requestCode == 1 && resultCode == 1) {
             btnThongBao.setImageResource(R.drawable.bell);
+        }
+        if (requestCode == 2 && resultCode == 1) {
+            congViecList = dbHelper.getAllCongViec(getIntent().getStringExtra("MaSv"));
+            softCongViecList(congViecList);
+            showlvCongViec();
         }
     }
 

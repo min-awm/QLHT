@@ -64,7 +64,7 @@ public class Update_Timetable extends AppCompatActivity {
             public void onClick(View v) {
                 // Cập nhật các giá trị từ các trường đầu vào
 
-                // mon = mon_input.getText().toString().trim();
+                mon = mon_input.getText().toString().trim();
                 thu = thu_input.getText().toString().trim();
                 ngay = ngay_input.getText().toString().trim();
                 giangvien = giangvien_input.getText().toString().trim();
@@ -72,7 +72,7 @@ public class Update_Timetable extends AppCompatActivity {
                 tiet = tiet_input.getText().toString().trim();
                 diadiem = diadiem_input.getText().toString().trim();
 
-                boolean isUpdated = myDB.updateDataTime(Update_Timetable.this, id, thu, ngay, giangvien, phong, tiet, diadiem);
+                boolean isUpdated = myDB.updateDataTime(Update_Timetable.this, id, mon, thu, ngay, giangvien, phong, tiet, diadiem);
                 if (isUpdated) {
                     Intent intent = new Intent(Update_Timetable.this, TimeTable.class);
                     startActivity(intent);
