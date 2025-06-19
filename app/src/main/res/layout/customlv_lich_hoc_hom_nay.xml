@@ -12,7 +12,7 @@
         android:layout_marginTop="10px"
         android:paddingTop="20px"
         android:text="Thiết kế web"
-        android:textColor="@color/black" 
+        android:textColor="@color/black"
         android:textSize="17dp"
         android:textStyle="bold">
 

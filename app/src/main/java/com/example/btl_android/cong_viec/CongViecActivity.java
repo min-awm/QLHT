@@ -1,5 +1,5 @@
 package com.example.btl_android.cong_viec;
- 
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -30,7 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 
 import com.example.btl_android.DatabaseHelper;
 import com.example.btl_android.R;
@@ -129,19 +128,14 @@ public class CongViecActivity extends AppCompatActivity {
                 return true;
             case R.id.congviec_delete:
                 // Xử lý sự kiện xóa
-                new AlertDialog.Builder(this)
-                        .setTitle("Xác nhận")
-                        .setMessage("Bạn có chắc chắn muốn xóa công việc này không?")
-                        .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(CongViecActivity.this, "Đã xóa công việc", Toast.LENGTH_SHORT).show();
-                                dbHelper.deleteCongViec(congViecList.get(selectedItemPosition).maCongViec);
-                                congViecList.remove(congViecList.get(selectedItemPosition));
-                                cvAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("Hủy", null)
-                        .show();
+                new AlertDialog.Builder(this).setTitle("Xác nhận").setMessage("Bạn có chắc chắn muốn xóa công việc này không?").setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(CongViecActivity.this, "Đã xóa công việc", Toast.LENGTH_SHORT).show();
+                        dbHelper.deleteCongViec(congViecList.get(selectedItemPosition).maCongViec);
+                        congViecList.remove(congViecList.get(selectedItemPosition));
+                        cvAdapter.notifyDataSetChanged();
+                    }
+                }).setNegativeButton("Hủy", null).show();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -244,7 +238,7 @@ public class CongViecActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-// Khi bấm nút "Thêm" hoặc "Lưu", kiểm tra và xử lý dữ liệu
+        // Khi bấm nút "Thêm" hoặc "Lưu", kiểm tra và xử lý dữ liệu
         Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,7 +278,7 @@ public class CongViecActivity extends AppCompatActivity {
                     CongViec x = new CongViec(dbHelper.getMaxId() + 1, maSv, tenCongViec, chiTietCongViec, mucUuTien + "", thoiHanGio, thoiHanNgay, 0);
                     boolean isAdded = dbHelper.addCongViec(x); // Thêm công việc
                     if (isAdded) {
-                        congViecList.add(0,x);
+                        congViecList.add(0, x);
                         softCongViecList(congViecList);
                         Toast.makeText(getApplicationContext(), "Thêm công việc thành công!", Toast.LENGTH_SHORT).show();
                     } else {
@@ -331,9 +325,7 @@ public class CongViecActivity extends AppCompatActivity {
     }
 
     private void spinner() {
-        this.adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                this.mucUuTienList);
+        this.adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.mucUuTienList);
         this.spMucUuTien.setAdapter(this.adapter);
 
         this.spMucUuTien.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -357,15 +349,14 @@ public class CongViecActivity extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         // Tạo DatePickerDialog
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(android.widget.DatePicker datePicker, int year, int month, int day) {
-                        // Cập nhật TextView với ngày được chọn
-                        String selectedDate = year + "-" + (month + 1) + "-" + day;
-                        etThoiHanNgay.setText(selectedDate);
-                    }
-                }, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(android.widget.DatePicker datePicker, int year, int month, int day) {
+                // Cập nhật TextView với ngày được chọn
+                String selectedDate = year + "-" + (month + 1) + "-" + day;
+                etThoiHanNgay.setText(selectedDate);
+            }
+        }, year, month, day);
         datePickerDialog.show();
     }
 
@@ -376,15 +367,14 @@ public class CongViecActivity extends AppCompatActivity {
         int minute = calendar.get(Calendar.MINUTE);
 
         // Tạo TimePickerDialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(android.widget.TimePicker timePicker, int hourOfDay, int minute) {
-                        // Cập nhật TextView với giờ được chọn
-                        String selectedTime = hourOfDay + ":" + String.format("%02d", minute);
-                        etThoiHanGio.setText(selectedTime);
-                    }
-                }, hour, minute, true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(android.widget.TimePicker timePicker, int hourOfDay, int minute) {
+                // Cập nhật TextView với giờ được chọn
+                String selectedTime = hourOfDay + ":" + String.format("%02d", minute);
+                etThoiHanGio.setText(selectedTime);
+            }
+        }, hour, minute, true);
         timePickerDialog.show();
     }
 

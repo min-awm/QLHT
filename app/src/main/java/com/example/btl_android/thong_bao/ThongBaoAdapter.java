@@ -1,5 +1,5 @@
 package com.example.btl_android.thong_bao;
- 
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

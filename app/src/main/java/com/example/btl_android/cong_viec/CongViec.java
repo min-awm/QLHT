@@ -1,5 +1,5 @@
 package com.example.btl_android.cong_viec;
- 
+
 /**
  * @noinspection ALL
  */
@@ -12,6 +12,7 @@ public class CongViec {
     String thoiHanGio;
     String thoiHanNgay;
     int trangThai;
+
     public CongViec(final int maCongViec, String maSinhVien, final String tenCongViec, final String chiTietCongViec, final String mucUuTien, final String thoiHanGio, final String thoiHanNgay, final int trangThai) {
         this.maCongViec = maCongViec;
         this.maSinhVien = maSinhVien;

@@ -10,16 +10,16 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
-        android:layout_width="match_parent" 
+        android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/back_icon"
         android:background="@drawable/main1_button_background"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/back_icon"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Lịch Học"/>
+        app:title="Lịch Học" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchPerson"

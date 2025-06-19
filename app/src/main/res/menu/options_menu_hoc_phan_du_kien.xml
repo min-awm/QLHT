@@ -6,7 +6,7 @@
         android:orderInCategory="100"
         android:title="Thêm"
         app:showAsAction="never" />
-    <item 
+    <item
         android:id="@+id/action_edit"
         android:orderInCategory="101"
         android:title="Sửa"

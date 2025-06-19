@@ -24,478 +24,9 @@ import java.util.List;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public DatabaseHelper(@Nullable final Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(final SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_SINHVIEN);
-        db.execSQL(CREATE_TABLE_CONGVIEC);
-        db.execSQL(CREATE_TABLE_CHUYENNGANH);
-        db.execSQL(CREATE_TABLE_HOCPHAN);
-        db.execSQL(CREATE_TABLE_LOAIHOCPHAN);
-        db.execSQL(CREATE_TABLE_KETQUAHOCPHAN);
-        db.execSQL(CREATE_TABLE_LICHHOC);
-        db.execSQL(CREATE_TABLE_THONGBAO);
-
-        populateInitialData(db);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS SinhVien");
-        db.execSQL("DROP TABLE IF EXISTS CongViec");
-        db.execSQL("DROP TABLE IF EXISTS ChuyenNganh");
-        db.execSQL("DROP TABLE IF EXISTS HocPhan");
-        db.execSQL("DROP TABLE IF EXISTS LoaiHocPhan");
-        db.execSQL("DROP TABLE IF EXISTS KetQuaHocPhan");
-        db.execSQL("DROP TABLE IF EXISTS LichHoc");
-        db.execSQL("DROP TABLE IF EXISTS ThongBao");
-        onCreate(db);
-    }
-
-    private void populateInitialData(final SQLiteDatabase db) {
-        db.execSQL(INSERT_TABLE_SINHVIEN);
-        db.execSQL(INSERT_TABLE_CONGVIEC);
-        db.execSQL(INSERT_TABLE_CHUYENNGANH);
-        db.execSQL(INSERT_TABLE_HOCPHAN);
-        db.execSQL(INSERT_TABLE_LOAIHOCPHAN);
-        db.execSQL(INSERT_TABLE_KETQUAHOCPHAN);
-        db.execSQL(INSERT_TABLE_LICHHOC);
-    }
-
-    // CRUD operations for HocPhan
-    public boolean addHocPhan(HocPhan hocPhan) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("maHp", hocPhan.getMaHp());
-        values.put("tenHp", hocPhan.getTenHp());
-        values.put("soTinChiLyThuyet", hocPhan.getSoTinChiLt());
-        values.put("soTinChiThucHanh", hocPhan.getSoTinChiTh());
-        values.put("soTietLyThuyet", hocPhan.getSoTietLt());
-        values.put("soTietThucHanh", hocPhan.getSoTietTh());
-        values.put("hocKy", hocPhan.getHocKy());
-        values.put("hinhThucThi", hocPhan.getHinhThucThi());
-        values.put("heSo", hocPhan.getHeSo());
-
-        long result = db.insert("HocPhan", null, values);
-        db.close();
-
-        return result != -1;
-    }
-
-    public boolean updateHocPhan(HocPhan hocPhan) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("tenHp", hocPhan.getTenHp());
-        values.put("soTinChiLyThuyet", hocPhan.getSoTinChiLt());
-        values.put("soTinChiThucHanh", hocPhan.getSoTinChiTh());
-        values.put("soTietLyThuyet", hocPhan.getSoTietLt());
-        values.put("soTietThucHanh", hocPhan.getSoTietTh());
-        values.put("hocKy", hocPhan.getHocKy());
-        values.put("hinhThucThi", hocPhan.getHinhThucThi());
-        values.put("heSo", hocPhan.getHeSo());
-
-        int result = db.update("HocPhan", values, "maHp = ?", new String[]{hocPhan.getMaHp()});
-        db.close();
-        return result > 0;
-    }
-
-    public void deleteHocPhan(String maHp) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete("HocPhan", "maHp=?", new String[]{maHp});
-        if (result == -1) {
-            Log.e("DatabaseHelper", "Xóa học phần thất bại");
-        } else {
-            Log.i("DatabaseHelper", "Xóa học phần thành công");
-        }
-        db.close();
-    }
-
-    public boolean isMaHpUnique(String maHp) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM HocPhan WHERE maHp = ?", new String[]{maHp});
-        boolean isUnique = !cursor.moveToFirst();
-        cursor.close();
-        db.close();
-        return isUnique;
-    }
-
-    public List<HocPhan> getAllHocPhan() {
-        List<HocPhan> hocPhanList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM HocPhan", null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                HocPhan hocPhan = new HocPhan(
-                        cursor.getString(cursor.getColumnIndexOrThrow("maHp")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("tenHp")),
-                        cursor.getFloat(cursor.getColumnIndexOrThrow("soTinChiLyThuyet")),
-                        cursor.getFloat(cursor.getColumnIndexOrThrow("soTinChiThucHanh")),
-                        cursor.getInt(cursor.getColumnIndexOrThrow("soTietLyThuyet")),
-                        cursor.getInt(cursor.getColumnIndexOrThrow("soTietThucHanh")),
-                        cursor.getInt(cursor.getColumnIndexOrThrow("hocKy")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("hinhThucThi")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("heSo"))
-                );
-                hocPhanList.add(hocPhan);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return hocPhanList;
-    }
-
-    public void insertLichHoc(String mon, String thu, String ngay, String giangVien, String phong, String tiet, String diaDiem) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues tb = new ContentValues();
-
-        tb.put("mon", mon);
-        tb.put("thu", thu);
-        tb.put("ngay", ngay);
-        tb.put("giangVien", giangVien);
-        tb.put("phong", phong);
-        tb.put("tiet", tiet);
-        tb.put("diaDiem", diaDiem);
-
-        long result = db.insert("LichHoc", null, tb);
-        if (result == -1) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Add Thanh Cong", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public Cursor getLichHoc() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT LichHoc.*, HocPhan.tenHp " +
-                "FROM LichHoc " +
-                "JOIN KetQuaHocPhan ON LichHoc.maLop = KetQuaHocPhan.maLop " +
-                "JOIN HocPhan ON KetQuaHocPhan.maHp = HocPhan.maHp";
-        Cursor cursor = null;
-        if (db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-
-    public ArrayList<MiniTimeTable> getLichHocLite(String date) {
-        ArrayList<MiniTimeTable> lichHocList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM LichHoc WHERE ngay = ?", new String[]{date});
-        if (cursor.moveToFirst()) {
-            do {
-                String tenmonhoc = cursor.getString(cursor.getColumnIndex("mon"));
-                String tiethoc = cursor.getString(cursor.getColumnIndex("tiet"));
-                String diadiem = cursor.getString(cursor.getColumnIndex("diaDiem"));
-                MiniTimeTable miniTimeTable = new MiniTimeTable(tenmonhoc, tiethoc, diadiem);
-
-                lichHocList.add(miniTimeTable);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return lichHocList;
-    }
-
-    public Cursor searchLichHoc(String keyword) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT LichHoc.*, HocPhan.tenHp " +
-                "FROM LichHoc " +
-                "JOIN KetQuaHocPhan ON LichHoc.maLop = KetQuaHocPhan.maLop " +
-                "JOIN HocPhan ON KetQuaHocPhan.maHp = HocPhan.maHp " +
-                "WHERE HocPhan.tenHp LIKE ? OR LichHoc.phong LIKE ?";
-        String[] selectionArgs = {"%" + keyword + "%", "%" + keyword + "%"};
-        Cursor cursor = db.rawQuery(query, selectionArgs);
-        return cursor;
-    }
-
-    public boolean updateDataTime(Context context, int row_id, String thu, String ngay, String giangVien, String phong, String tiet, String diaDiem) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //   values.put("mon", mon);
-        values.put("thu", thu);
-        values.put("ngay", ngay);
-        values.put("giangVien", giangVien);
-        values.put("phong", phong);
-        values.put("tiet", tiet);
-        values.put("diaDiem", diaDiem);
-        values.put("loaiTietHoc", 0);
-        values.put("vang", 0);
-
-        int result = db.update("LichHoc", values, "id = ?", new String[]{String.valueOf(row_id)});
-        db.close();
-
-        if (result > 0) {
-            Log.d("updateDataTime", "Update Successful for row_id: " + row_id);
-            Toast.makeText(context, "Cập Nhật Thành Công !!", Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            Log.d("updateDataTime", "Update Failed for row_id: " + row_id);
-            Toast.makeText(context, "Cập Nhật Không Thành Công !!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-    }
-
-    public boolean deleteLichHoc(int row_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int result = db.delete("LichHoc", "id=?", new String[]{String.valueOf(row_id)});
-        db.close();
-        return result > 0;
-    }
-
-    public boolean updateDiem(Diem diem, String maSv) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("tx1", diem.getTx1());
-        values.put("tx2", diem.getTx2());
-        values.put("giuaKy", diem.getGiuaKy());
-        values.put("diemKiVong", diem.getDiemKiVong());
-        values.put("cuoiKy", diem.getCuoiKy());
-        long res = db.update("KetQuaHocPhan", values, "maLop = ? AND maSv = ?", new String[]{diem.getMaLop(), maSv});
-        db.close();
-        return res > 0;
-    }
-
-    public List<HocPhan> getHocPhanByHocKy(int hocKy) {
-        List<HocPhan> hocPhanList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM HocPhan WHERE hocKy = ?", new String[]{String.valueOf(hocKy)});
-
-        if (cursor.moveToFirst()) {
-            do {
-                HocPhan hocPhan = new HocPhan(
-                        cursor.getString(cursor.getColumnIndex("maHp")),
-                        cursor.getString(cursor.getColumnIndex("tenHp")),
-                        cursor.getFloat(cursor.getColumnIndex("soTinChiLyThuyet")),
-                        cursor.getFloat(cursor.getColumnIndex("soTinChiThucHanh")),
-                        cursor.getInt(cursor.getColumnIndex("soTietLyThuyet")),
-                        cursor.getInt(cursor.getColumnIndex("soTietThucHanh")),
-                        cursor.getInt(cursor.getColumnIndex("hocKy")),
-                        cursor.getString(cursor.getColumnIndex("hinhThucThi")),
-                        cursor.getString(cursor.getColumnIndex("heSo"))
-                );
-                hocPhanList.add(hocPhan);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return hocPhanList;
-    }
-
-    // Khai báo kiểu static cho biến tatCaDiemHpList, vì là biến tĩnh, giá trị sẽ duy trì thông qua các lớp.
-    // Bên cạnh đó, vì sử dụng modifier public, chia sẻ biến giữa các lớp giúp tiết kiệm bộ nhớ và số lần
-    // truy vấn, tù đó cải thiện thời gian phản hồi.
-    // Phương thức lấy toàn bộ điểm học phần của sinh viên hiện đang đăng nhập vào ứng dụng.
-    public void getDiemHp(String maSv) {
-        // Khi có sự cập nhật điểm học phần, xóa rỗng biến.
-        tatCaDiemHpList.clear();
-        // Tạo 1 đối tượng Database chỉ đọc.
-        SQLiteDatabase db = this.getReadableDatabase();
-        // Viết câu truy vấn
-        String query =
-                // Chọn lấy các cột cần lấy dữ liệu.
-                "SELECT kq.maLop, kq.maSv, hp.maHp, hp.tenHp, lhp.loai, hp.soTinChiLyThuyet, hp.soTinChiThucHanh, " +
-                "hp.soTietLyThuyet, hp.soTietThucHanh, hp.hinhThucThi, hp.heSo, kq.hocKy, " +
-                "kq.tx1, kq.tx2, kq.giuaKy, kq.cuoiKy, kq.diemKiVong, " +
-                // Tính số tiết vắng lý thuyết và số tiết vắng thực hành.
-                "SUM(CASE WHEN lh.vang = 1 AND lh.loaiTietHoc = 0 THEN 1 ELSE 0 END) AS vangLt, " +
-                "SUM(CASE WHEN lh.vang = 1 AND lh.loaiTietHoc = 1 THEN 1 ELSE 0 END) AS vangTh " +
-                // Thực hiện JOIN các bảng.
-                "FROM KetQuaHocPhan kq " +
-                // JOIN bảng SinhVien để chỉ lấy thông tin maSv và maCn.
-                "JOIN SinhVien sv ON sv.maSv = kq.maSv " +
-                // JOIN bảng HocPhan để lấy các thông tin liên quan tới học phần.
-                "JOIN HocPhan hp ON hp.maHp = kq.maHp " +
-                // JOIN bảng LoaiHocPhan để xác định học phần bắt buộc hoặc tự chọn dựa trên maSv và maCn.
-                "JOIN LoaiHocPhan lhp ON lhp.maHp = hp.maHp AND lhp.maCn = sv.maCn " +
-                // LEFT JOIN bảng LichHoc để xác định số tiết nghỉ của sinh viên dựa trên maLop và maSv.
-                // Chọn LEFT JOIN để lấy hết các trường hợp ở bảng KetQuaHocPhan, ngay cả khi không có dữ liệu
-                // tương ứng bên bảng LichHoc.
-                "LEFT JOIN LichHoc lh ON lh.maLop = kq.maLop AND lh.maSv = kq.maSv " +
-                // Lấy điều kiện là maSv của sinh viên đang đăng nhập.
-                "WHERE kq.maSv = ?" +
-                "GROUP BY kq.maLop, kq.maSv, kq.maHp, hp.tenHp, lhp.loai, hp.soTietLyThuyet, hp.soTietThucHanh, " +
-                "hp.hinhThucThi, hp.heSo, kq.hocKy, kq.tx1, kq.tx2, kq.giuaKy, kq.cuoiKy, kq.diemKiVong " +
-                // Sắp xếp theo tên học phần.
-                "ORDER BY hp.tenHp";
-
-        // Thực hiện truy vấn.
-        Cursor cursor = db.rawQuery(query, new String[]{maSv});
-        // Nếu truy vấn có kết quả trả về.
-        if (cursor.moveToFirst()) {
-            // Thực hiện lấy dữ liệu đã được truy vấn.
-            do {
-                // Tạo 1 instance Diem.
-                Diem diem = new Diem();
-
-                // Set các thuộc tính của diem.
-                diem.setMaLop(cursor.getString(cursor.getColumnIndex("maLop")));
-                diem.setMaHp(cursor.getString(cursor.getColumnIndex("maHp")));
-                diem.setTenHp(cursor.getString(cursor.getColumnIndex("tenHp")));
-                diem.setLoai(cursor.getInt(cursor.getColumnIndex("loai")));
-                diem.setSoTinChiLt(cursor.getFloat(cursor.getColumnIndex("soTinChiLyThuyet")));
-                diem.setSoTinChiTh(cursor.getFloat(cursor.getColumnIndex("soTinChiThucHanh")));
-                diem.setSoTietLt(cursor.getInt(cursor.getColumnIndex("soTietLyThuyet")));
-                diem.setSoTietTh(cursor.getInt(cursor.getColumnIndex("soTietThucHanh")));
-                diem.setHinhThucThi(cursor.getString(cursor.getColumnIndex("hinhThucThi")));
-                diem.setHocKy(cursor.getInt(cursor.getColumnIndex("hocKy")));
-                diem.setHeSo(cursor.getString(cursor.getColumnIndex("heSo")));
-                diem.setTx1(cursor.isNull(cursor.getColumnIndex("tx1")) ? null : cursor.getFloat(cursor.getColumnIndex("tx1")));
-                diem.setTx2(cursor.isNull(cursor.getColumnIndex("tx2")) ? null : cursor.getFloat(cursor.getColumnIndex("tx2")));
-                diem.setGiuaKy(cursor.isNull(cursor.getColumnIndex("giuaKy")) ? null : cursor.getFloat(cursor.getColumnIndex("giuaKy")));
-                diem.setCuoiKy(cursor.isNull(cursor.getColumnIndex("cuoiKy")) ? null : cursor.getFloat(cursor.getColumnIndex("cuoiKy")));
-                diem.setDiemKiVong(cursor.isNull(cursor.getColumnIndex("diemKiVong")) ? null : cursor.getFloat(cursor.getColumnIndex("diemKiVong")));
-                diem.setVangLt(cursor.getInt(cursor.getColumnIndex("vangLt")));
-                diem.setVangTh(cursor.getInt(cursor.getColumnIndex("vangTh")));
-
-                // Thêm diem vào biến tatCaDiemHpList.
-                tatCaDiemHpList.add(diem);
-            } while (cursor.moveToNext());
-            // Thực hiện truy vấn cho tới khi cursor trả về null, hay đã duyệt qua hết tất cả kết quả.
-        }
-        // Đóng cursor và db để giải phóng bộ nhớ và tài nguyên.
-        cursor.close();
-        db.close();
-    }
-
-    public List<Diem> getDiemHpTheoKy(String hocKyStr) {
-        int hocKy = Integer.parseInt(hocKyStr);
-        List<Diem> diemList = new ArrayList<>();
-        for (Diem diem : tatCaDiemHpList) {
-            if (diem.getHocKy() == hocKy) diemList.add(diem);
-        }
-        return diemList;
-    }
-
-    public boolean insertThongBao(String maSv, String tieuDe, String noiDung, String thoiGian) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("maSv", maSv);
-        values.put("tieuDe", tieuDe);
-        values.put("noiDung", noiDung);
-        values.put("thoiGian", thoiGian);
-        long res = db.insert("ThongBao", null, values);
-        db.close();
-        return res > 0;
-    }
-
-    public List<ThongBao> getThongBao(String maSv) {
-        List<ThongBao> thongBaoList = new ArrayList<>();
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT tieuDe, noiDung, thoiGian FROM ThongBao WHERE maSv = ? ORDER BY id DESC", new String[]{maSv});
-
-        if (cursor.moveToFirst()) {
-            do {
-                String tieuDe = cursor.getString(cursor.getColumnIndex("tieuDe"));
-                String noiDung = cursor.getString(cursor.getColumnIndex("noiDung"));
-                String thoiGian = cursor.getString(cursor.getColumnIndex("thoiGian"));
-                ThongBao thongBao = new ThongBao(tieuDe, noiDung, thoiGian);
-                thongBaoList.add(thongBao);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return thongBaoList;
-    }
-
-    public ArrayList<CongViec> getAllCongViec(String msv) {
-        ArrayList<CongViec> congViecList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM CongViec WHERE maSv = ?", new String[]{msv});
-        if (cursor.moveToFirst()) {
-            do {
-                int macongviec = cursor.getInt(cursor.getColumnIndex("id"));
-                String maSinhVien = cursor.getString(cursor.getColumnIndex("maSv"));
-                String tencongviec = cursor.getString(cursor.getColumnIndex("tenViec"));
-                String chitietcongviec = cursor.getString(cursor.getColumnIndex("chiTiet"));
-                String mucuutien = cursor.getString(cursor.getColumnIndex("mucUuTien"));
-                String thoihanngay = cursor.getString(cursor.getColumnIndex("thoiHanNgay"));
-                String thoihangio = cursor.getString(cursor.getColumnIndex("thoiHanGio"));
-                int trangthai = cursor.getInt(cursor.getColumnIndex("trangThai"));
-                CongViec congViec = new CongViec(macongviec, maSinhVien, tencongviec, chitietcongviec, mucuutien, thoihangio, thoihanngay, trangthai);
-
-                congViecList.add(congViec);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return congViecList;
-    }
-    public Cursor searchCongViecByTen(String keyword) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM CongViec WHERE tenViec LIKE ?";
-        String[] selectionArgs = {"%" + keyword + "%"};
-        Cursor cursor = db.rawQuery(query, selectionArgs);
-        return cursor;
-    }
-
-    public boolean addCongViec(CongViec congViec) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id", congViec.getMaCongViec());
-        values.put("maSv", congViec.getMaSinhVien());
-        values.put("tenViec", congViec.getTenCongViec());
-        values.put("chiTiet", congViec.getChiTietCongViec());
-        values.put("mucUuTien", congViec.getMucUuTien());
-        values.put("thoiHanNgay", congViec.getThoiHanNgay());
-        values.put("thoiHanGio", congViec.getThoiHanGio());
-        values.put("trangThai", congViec.getTrangThai());
-
-        db.insert("CongViec", null, values);
-        db.close();
-        return true;
-    }
-
-    public boolean updateCongViec(CongViec congViec) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id", congViec.getMaCongViec());
-        values.put("maSv", congViec.getMaSinhVien());
-        values.put("tenViec", congViec.getTenCongViec());
-        values.put("chiTiet", congViec.getChiTietCongViec());
-        values.put("mucUuTien", congViec.getMucUuTien());
-        values.put("thoiHanNgay", congViec.getThoiHanNgay());
-        values.put("thoiHanGio", congViec.getThoiHanGio());
-        values.put("trangThai", congViec.getTrangThai());
-
-        // Cập nhật công việc dựa trên ID
-        db.update("CongViec", values, "id" + " = ?", new String[]{String.valueOf(congViec.getMaCongViec())});
-        db.close();
-        return true;
-    }
-
-    public void deleteCongViec(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("CongViec", "id = ?", new String[]{String.valueOf(id)});
-        db.close();
-    }
-
-    public int getMaxId() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT MAX(id) AS max_id FROM CongViec";
-        Cursor cursor = db.rawQuery(query, null);
-
-        int maxId = -1;
-        if (cursor.moveToFirst()) {
-            maxId = cursor.getInt(cursor.getColumnIndex("max_id"));
-        }
-        cursor.close();
-        db.close();
-        return maxId;
-    }
-
     // Database name and version
     private static final String DATABASE_NAME = "QuanLyHocTapCaNhan.db";
     private static final int DATABASE_VERSION = 1;
-    public static List<Diem> tatCaDiemHpList = new ArrayList<>();
-    private Context context;
     // SinhVien table
     private static final String CREATE_TABLE_SINHVIEN =
             "CREATE TABLE IF NOT EXISTS SinhVien (" +
@@ -920,4 +451,474 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "(36, '2021606856', '2021HP005.4', 'Thứ Bảy', '2024-08-10', 605, 'Nguyễn Thị Thanh', '4-6', 'A8', 0, 1), " +
                     "(37, '2021606856', '2021HP005.5', 'Chủ Nhật', '2024-08-11', 606, 'Trần Văn Thịnh', '7-9', 'A9', 1, 0), " +
                     "(38, '2021606856', '2021HP005.6', 'Thứ Hai', '2024-08-12', 607, 'Lê Thị Minh', '10-12', 'A10', 0, 1)";
+    public static List<Diem> tatCaDiemHpList = new ArrayList<>();
+    private Context context;
+
+    public DatabaseHelper(@Nullable final Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(final SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_SINHVIEN);
+        db.execSQL(CREATE_TABLE_CONGVIEC);
+        db.execSQL(CREATE_TABLE_CHUYENNGANH);
+        db.execSQL(CREATE_TABLE_HOCPHAN);
+        db.execSQL(CREATE_TABLE_LOAIHOCPHAN);
+        db.execSQL(CREATE_TABLE_KETQUAHOCPHAN);
+        db.execSQL(CREATE_TABLE_LICHHOC);
+        db.execSQL(CREATE_TABLE_THONGBAO);
+
+        populateInitialData(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS SinhVien");
+        db.execSQL("DROP TABLE IF EXISTS CongViec");
+        db.execSQL("DROP TABLE IF EXISTS ChuyenNganh");
+        db.execSQL("DROP TABLE IF EXISTS HocPhan");
+        db.execSQL("DROP TABLE IF EXISTS LoaiHocPhan");
+        db.execSQL("DROP TABLE IF EXISTS KetQuaHocPhan");
+        db.execSQL("DROP TABLE IF EXISTS LichHoc");
+        db.execSQL("DROP TABLE IF EXISTS ThongBao");
+        onCreate(db);
+    }
+
+    private void populateInitialData(final SQLiteDatabase db) {
+        db.execSQL(INSERT_TABLE_SINHVIEN);
+        db.execSQL(INSERT_TABLE_CONGVIEC);
+        db.execSQL(INSERT_TABLE_CHUYENNGANH);
+        db.execSQL(INSERT_TABLE_HOCPHAN);
+        db.execSQL(INSERT_TABLE_LOAIHOCPHAN);
+        db.execSQL(INSERT_TABLE_KETQUAHOCPHAN);
+        db.execSQL(INSERT_TABLE_LICHHOC);
+    }
+
+    // CRUD operations for HocPhan
+    public boolean addHocPhan(HocPhan hocPhan) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("maHp", hocPhan.getMaHp());
+        values.put("tenHp", hocPhan.getTenHp());
+        values.put("soTinChiLyThuyet", hocPhan.getSoTinChiLt());
+        values.put("soTinChiThucHanh", hocPhan.getSoTinChiTh());
+        values.put("soTietLyThuyet", hocPhan.getSoTietLt());
+        values.put("soTietThucHanh", hocPhan.getSoTietTh());
+        values.put("hocKy", hocPhan.getHocKy());
+        values.put("hinhThucThi", hocPhan.getHinhThucThi());
+        values.put("heSo", hocPhan.getHeSo());
+
+        long result = db.insert("HocPhan", null, values);
+        db.close();
+
+        return result != -1;
+    }
+
+    public boolean updateHocPhan(HocPhan hocPhan) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("tenHp", hocPhan.getTenHp());
+        values.put("soTinChiLyThuyet", hocPhan.getSoTinChiLt());
+        values.put("soTinChiThucHanh", hocPhan.getSoTinChiTh());
+        values.put("soTietLyThuyet", hocPhan.getSoTietLt());
+        values.put("soTietThucHanh", hocPhan.getSoTietTh());
+        values.put("hocKy", hocPhan.getHocKy());
+        values.put("hinhThucThi", hocPhan.getHinhThucThi());
+        values.put("heSo", hocPhan.getHeSo());
+
+        int result = db.update("HocPhan", values, "maHp = ?", new String[]{hocPhan.getMaHp()});
+        db.close();
+        return result > 0;
+    }
+
+    public void deleteHocPhan(String maHp) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete("HocPhan", "maHp=?", new String[]{maHp});
+        if (result == -1) {
+            Log.e("DatabaseHelper", "Xóa học phần thất bại");
+        } else {
+            Log.i("DatabaseHelper", "Xóa học phần thành công");
+        }
+        db.close();
+    }
+
+    public boolean isMaHpUnique(String maHp) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM HocPhan WHERE maHp = ?", new String[]{maHp});
+        boolean isUnique = !cursor.moveToFirst();
+        cursor.close();
+        db.close();
+        return isUnique;
+    }
+
+    public List<HocPhan> getAllHocPhan() {
+        List<HocPhan> hocPhanList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM HocPhan", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                HocPhan hocPhan = new HocPhan(
+                        cursor.getString(cursor.getColumnIndexOrThrow("maHp")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("tenHp")),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow("soTinChiLyThuyet")),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow("soTinChiThucHanh")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("soTietLyThuyet")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("soTietThucHanh")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("hocKy")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("hinhThucThi")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("heSo"))
+                );
+                hocPhanList.add(hocPhan);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return hocPhanList;
+    }
+
+    public void insertLichHoc(String mon, String thu, String ngay, String giangVien, String phong, String tiet, String diaDiem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues tb = new ContentValues();
+
+        tb.put("mon", mon);
+        tb.put("thu", thu);
+        tb.put("ngay", ngay);
+        tb.put("giangVien", giangVien);
+        tb.put("phong", phong);
+        tb.put("tiet", tiet);
+        tb.put("diaDiem", diaDiem);
+
+        long result = db.insert("LichHoc", null, tb);
+        if (result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Add Thanh Cong", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public Cursor getLichHoc() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT LichHoc.*, HocPhan.tenHp " +
+                "FROM LichHoc " +
+                "JOIN KetQuaHocPhan ON LichHoc.maLop = KetQuaHocPhan.maLop " +
+                "JOIN HocPhan ON KetQuaHocPhan.maHp = HocPhan.maHp";
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    public ArrayList<MiniTimeTable> getLichHocLite(String date) {
+        ArrayList<MiniTimeTable> lichHocList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM LichHoc WHERE ngay = ?", new String[]{date});
+        if (cursor.moveToFirst()) {
+            do {
+                String tenmonhoc = cursor.getString(cursor.getColumnIndex("mon"));
+                String tiethoc = cursor.getString(cursor.getColumnIndex("tiet"));
+                String diadiem = cursor.getString(cursor.getColumnIndex("diaDiem"));
+                MiniTimeTable miniTimeTable = new MiniTimeTable(tenmonhoc, tiethoc, diadiem);
+
+                lichHocList.add(miniTimeTable);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return lichHocList;
+    }
+
+    public Cursor searchLichHoc(String keyword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT LichHoc.*, HocPhan.tenHp " +
+                "FROM LichHoc " +
+                "JOIN KetQuaHocPhan ON LichHoc.maLop = KetQuaHocPhan.maLop " +
+                "JOIN HocPhan ON KetQuaHocPhan.maHp = HocPhan.maHp " +
+                "WHERE HocPhan.tenHp LIKE ? OR LichHoc.phong LIKE ?";
+        String[] selectionArgs = {"%" + keyword + "%", "%" + keyword + "%"};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        return cursor;
+    }
+
+    public boolean updateDataTime(Context context, int row_id, String thu, String ngay, String giangVien, String phong, String tiet, String diaDiem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //   values.put("mon", mon);
+        values.put("thu", thu);
+        values.put("ngay", ngay);
+        values.put("giangVien", giangVien);
+        values.put("phong", phong);
+        values.put("tiet", tiet);
+        values.put("diaDiem", diaDiem);
+        values.put("loaiTietHoc", 0);
+        values.put("vang", 0);
+
+        int result = db.update("LichHoc", values, "id = ?", new String[]{String.valueOf(row_id)});
+        db.close();
+
+        if (result > 0) {
+            Log.d("updateDataTime", "Update Successful for row_id: " + row_id);
+            Toast.makeText(context, "Cập Nhật Thành Công !!", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Log.d("updateDataTime", "Update Failed for row_id: " + row_id);
+            Toast.makeText(context, "Cập Nhật Không Thành Công !!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    public boolean deleteLichHoc(int row_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete("LichHoc", "id=?", new String[]{String.valueOf(row_id)});
+        db.close();
+        return result > 0;
+    }
+
+    public boolean updateDiem(Diem diem, String maSv) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("tx1", diem.getTx1());
+        values.put("tx2", diem.getTx2());
+        values.put("giuaKy", diem.getGiuaKy());
+        values.put("diemKiVong", diem.getDiemKiVong());
+        values.put("cuoiKy", diem.getCuoiKy());
+        long res = db.update("KetQuaHocPhan", values, "maLop = ? AND maSv = ?", new String[]{diem.getMaLop(), maSv});
+        db.close();
+        return res > 0;
+    }
+
+    public List<HocPhan> getHocPhanByHocKy(int hocKy) {
+        List<HocPhan> hocPhanList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM HocPhan WHERE hocKy = ?", new String[]{String.valueOf(hocKy)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                HocPhan hocPhan = new HocPhan(
+                        cursor.getString(cursor.getColumnIndex("maHp")),
+                        cursor.getString(cursor.getColumnIndex("tenHp")),
+                        cursor.getFloat(cursor.getColumnIndex("soTinChiLyThuyet")),
+                        cursor.getFloat(cursor.getColumnIndex("soTinChiThucHanh")),
+                        cursor.getInt(cursor.getColumnIndex("soTietLyThuyet")),
+                        cursor.getInt(cursor.getColumnIndex("soTietThucHanh")),
+                        cursor.getInt(cursor.getColumnIndex("hocKy")),
+                        cursor.getString(cursor.getColumnIndex("hinhThucThi")),
+                        cursor.getString(cursor.getColumnIndex("heSo"))
+                );
+                hocPhanList.add(hocPhan);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return hocPhanList;
+    }
+
+    // Khai báo kiểu static cho biến tatCaDiemHpList, vì là biến tĩnh, giá trị sẽ duy trì thông qua các lớp.
+    // Bên cạnh đó, vì sử dụng modifier public, chia sẻ biến giữa các lớp giúp tiết kiệm bộ nhớ và số lần
+    // truy vấn, tù đó cải thiện thời gian phản hồi.
+    // Phương thức lấy toàn bộ điểm học phần của sinh viên hiện đang đăng nhập vào ứng dụng.
+    public void getDiemHp(String maSv) {
+        // Khi có sự cập nhật điểm học phần, xóa rỗng biến.
+        tatCaDiemHpList.clear();
+        // Tạo 1 đối tượng Database chỉ đọc.
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Viết câu truy vấn
+        String query =
+                // Chọn lấy các cột cần lấy dữ liệu.
+                "SELECT kq.maLop, kq.maSv, hp.maHp, hp.tenHp, lhp.loai, hp.soTinChiLyThuyet, hp.soTinChiThucHanh, " +
+                        "hp.soTietLyThuyet, hp.soTietThucHanh, hp.hinhThucThi, hp.heSo, kq.hocKy, " +
+                        "kq.tx1, kq.tx2, kq.giuaKy, kq.cuoiKy, kq.diemKiVong, " +
+                        // Tính số tiết vắng lý thuyết và số tiết vắng thực hành.
+                        "SUM(CASE WHEN lh.vang = 1 AND lh.loaiTietHoc = 0 THEN 1 ELSE 0 END) AS vangLt, " +
+                        "SUM(CASE WHEN lh.vang = 1 AND lh.loaiTietHoc = 1 THEN 1 ELSE 0 END) AS vangTh " +
+                        // Thực hiện JOIN các bảng.
+                        "FROM KetQuaHocPhan kq " +
+                        // JOIN bảng SinhVien để chỉ lấy thông tin maSv và maCn.
+                        "JOIN SinhVien sv ON sv.maSv = kq.maSv " +
+                        // JOIN bảng HocPhan để lấy các thông tin liên quan tới học phần.
+                        "JOIN HocPhan hp ON hp.maHp = kq.maHp " +
+                        // JOIN bảng LoaiHocPhan để xác định học phần bắt buộc hoặc tự chọn dựa trên maSv và maCn.
+                        "JOIN LoaiHocPhan lhp ON lhp.maHp = hp.maHp AND lhp.maCn = sv.maCn " +
+                        // LEFT JOIN bảng LichHoc để xác định số tiết nghỉ của sinh viên dựa trên maLop và maSv.
+                        // Chọn LEFT JOIN để lấy hết các trường hợp ở bảng KetQuaHocPhan, ngay cả khi không có dữ liệu
+                        // tương ứng bên bảng LichHoc.
+                        "LEFT JOIN LichHoc lh ON lh.maLop = kq.maLop AND lh.maSv = kq.maSv " +
+                        // Lấy điều kiện là maSv của sinh viên đang đăng nhập.
+                        "WHERE kq.maSv = ?" +
+                        "GROUP BY kq.maLop, kq.maSv, kq.maHp, hp.tenHp, lhp.loai, hp.soTietLyThuyet, hp.soTietThucHanh, " +
+                        "hp.hinhThucThi, hp.heSo, kq.hocKy, kq.tx1, kq.tx2, kq.giuaKy, kq.cuoiKy, kq.diemKiVong " +
+                        // Sắp xếp theo tên học phần.
+                        "ORDER BY hp.tenHp";
+
+        // Thực hiện truy vấn.
+        Cursor cursor = db.rawQuery(query, new String[]{maSv});
+        // Nếu truy vấn có kết quả trả về.
+        if (cursor.moveToFirst()) {
+            // Thực hiện lấy dữ liệu đã được truy vấn.
+            do {
+                // Tạo 1 instance Diem.
+                Diem diem = new Diem();
+
+                // Set các thuộc tính của diem.
+                diem.setMaLop(cursor.getString(cursor.getColumnIndex("maLop")));
+                diem.setMaHp(cursor.getString(cursor.getColumnIndex("maHp")));
+                diem.setTenHp(cursor.getString(cursor.getColumnIndex("tenHp")));
+                diem.setLoai(cursor.getInt(cursor.getColumnIndex("loai")));
+                diem.setSoTinChiLt(cursor.getFloat(cursor.getColumnIndex("soTinChiLyThuyet")));
+                diem.setSoTinChiTh(cursor.getFloat(cursor.getColumnIndex("soTinChiThucHanh")));
+                diem.setSoTietLt(cursor.getInt(cursor.getColumnIndex("soTietLyThuyet")));
+                diem.setSoTietTh(cursor.getInt(cursor.getColumnIndex("soTietThucHanh")));
+                diem.setHinhThucThi(cursor.getString(cursor.getColumnIndex("hinhThucThi")));
+                diem.setHocKy(cursor.getInt(cursor.getColumnIndex("hocKy")));
+                diem.setHeSo(cursor.getString(cursor.getColumnIndex("heSo")));
+                diem.setTx1(cursor.isNull(cursor.getColumnIndex("tx1")) ? null : cursor.getFloat(cursor.getColumnIndex("tx1")));
+                diem.setTx2(cursor.isNull(cursor.getColumnIndex("tx2")) ? null : cursor.getFloat(cursor.getColumnIndex("tx2")));
+                diem.setGiuaKy(cursor.isNull(cursor.getColumnIndex("giuaKy")) ? null : cursor.getFloat(cursor.getColumnIndex("giuaKy")));
+                diem.setCuoiKy(cursor.isNull(cursor.getColumnIndex("cuoiKy")) ? null : cursor.getFloat(cursor.getColumnIndex("cuoiKy")));
+                diem.setDiemKiVong(cursor.isNull(cursor.getColumnIndex("diemKiVong")) ? null : cursor.getFloat(cursor.getColumnIndex("diemKiVong")));
+                diem.setVangLt(cursor.getInt(cursor.getColumnIndex("vangLt")));
+                diem.setVangTh(cursor.getInt(cursor.getColumnIndex("vangTh")));
+
+                // Thêm diem vào biến tatCaDiemHpList.
+                tatCaDiemHpList.add(diem);
+            } while (cursor.moveToNext());
+            // Thực hiện truy vấn cho tới khi cursor trả về null, hay đã duyệt qua hết tất cả kết quả.
+        }
+        // Đóng cursor và db để giải phóng bộ nhớ và tài nguyên.
+        cursor.close();
+        db.close();
+    }
+
+    public List<Diem> getDiemHpTheoKy(String hocKyStr) {
+        int hocKy = Integer.parseInt(hocKyStr);
+        List<Diem> diemList = new ArrayList<>();
+        for (Diem diem : tatCaDiemHpList) {
+            if (diem.getHocKy() == hocKy) diemList.add(diem);
+        }
+        return diemList;
+    }
+
+    public boolean insertThongBao(String maSv, String tieuDe, String noiDung, String thoiGian) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("maSv", maSv);
+        values.put("tieuDe", tieuDe);
+        values.put("noiDung", noiDung);
+        values.put("thoiGian", thoiGian);
+        long res = db.insert("ThongBao", null, values);
+        db.close();
+        return res > 0;
+    }
+
+    public List<ThongBao> getThongBao(String maSv) {
+        List<ThongBao> thongBaoList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT tieuDe, noiDung, thoiGian FROM ThongBao WHERE maSv = ? ORDER BY id DESC", new String[]{maSv});
+
+        if (cursor.moveToFirst()) {
+            do {
+                String tieuDe = cursor.getString(cursor.getColumnIndex("tieuDe"));
+                String noiDung = cursor.getString(cursor.getColumnIndex("noiDung"));
+                String thoiGian = cursor.getString(cursor.getColumnIndex("thoiGian"));
+                ThongBao thongBao = new ThongBao(tieuDe, noiDung, thoiGian);
+                thongBaoList.add(thongBao);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return thongBaoList;
+    }
+
+    public ArrayList<CongViec> getAllCongViec(String msv) {
+        ArrayList<CongViec> congViecList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM CongViec WHERE maSv = ?", new String[]{msv});
+        if (cursor.moveToFirst()) {
+            do {
+                int macongviec = cursor.getInt(cursor.getColumnIndex("id"));
+                String maSinhVien = cursor.getString(cursor.getColumnIndex("maSv"));
+                String tencongviec = cursor.getString(cursor.getColumnIndex("tenViec"));
+                String chitietcongviec = cursor.getString(cursor.getColumnIndex("chiTiet"));
+                String mucuutien = cursor.getString(cursor.getColumnIndex("mucUuTien"));
+                String thoihanngay = cursor.getString(cursor.getColumnIndex("thoiHanNgay"));
+                String thoihangio = cursor.getString(cursor.getColumnIndex("thoiHanGio"));
+                int trangthai = cursor.getInt(cursor.getColumnIndex("trangThai"));
+                CongViec congViec = new CongViec(macongviec, maSinhVien, tencongviec, chitietcongviec, mucuutien, thoihangio, thoihanngay, trangthai);
+
+                congViecList.add(congViec);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return congViecList;
+    }
+
+    public Cursor searchCongViecByTen(String keyword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM CongViec WHERE tenViec LIKE ?";
+        String[] selectionArgs = {"%" + keyword + "%"};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        return cursor;
+    }
+
+    public boolean addCongViec(CongViec congViec) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", congViec.getMaCongViec());
+        values.put("maSv", congViec.getMaSinhVien());
+        values.put("tenViec", congViec.getTenCongViec());
+        values.put("chiTiet", congViec.getChiTietCongViec());
+        values.put("mucUuTien", congViec.getMucUuTien());
+        values.put("thoiHanNgay", congViec.getThoiHanNgay());
+        values.put("thoiHanGio", congViec.getThoiHanGio());
+        values.put("trangThai", congViec.getTrangThai());
+
+        db.insert("CongViec", null, values);
+        db.close();
+        return true;
+    }
+
+    public boolean updateCongViec(CongViec congViec) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", congViec.getMaCongViec());
+        values.put("maSv", congViec.getMaSinhVien());
+        values.put("tenViec", congViec.getTenCongViec());
+        values.put("chiTiet", congViec.getChiTietCongViec());
+        values.put("mucUuTien", congViec.getMucUuTien());
+        values.put("thoiHanNgay", congViec.getThoiHanNgay());
+        values.put("thoiHanGio", congViec.getThoiHanGio());
+        values.put("trangThai", congViec.getTrangThai());
+
+        // Cập nhật công việc dựa trên ID
+        db.update("CongViec", values, "id" + " = ?", new String[]{String.valueOf(congViec.getMaCongViec())});
+        db.close();
+        return true;
+    }
+
+    public void deleteCongViec(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("CongViec", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public int getMaxId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT MAX(id) AS max_id FROM CongViec";
+        Cursor cursor = db.rawQuery(query, null);
+
+        int maxId = -1;
+        if (cursor.moveToFirst()) {
+            maxId = cursor.getInt(cursor.getColumnIndex("max_id"));
+        }
+        cursor.close();
+        db.close();
+        return maxId;
+    }
 }

@@ -1,5 +1,5 @@
 package com.example.btl_android.thong_bao;
- 
+
 import android.os.Bundle;
 import android.widget.ImageView;
 

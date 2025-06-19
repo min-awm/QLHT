@@ -1,5 +1,5 @@
 package com.example.btl_android.lich_hoc;
- 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -99,13 +99,13 @@ public class Update_Timetable extends AppCompatActivity {
 
     void getAndSetIntentData() {
         if (getIntent().hasExtra("mon") &&
-            getIntent().hasExtra("id") &&
-            getIntent().hasExtra("thu") &&
-            getIntent().hasExtra("ngay") &&
-            getIntent().hasExtra("giangvien") &&
-            getIntent().hasExtra("phong") &&
-            getIntent().hasExtra("tiet") &&
-            getIntent().hasExtra("diadiem")) {
+                getIntent().hasExtra("id") &&
+                getIntent().hasExtra("thu") &&
+                getIntent().hasExtra("ngay") &&
+                getIntent().hasExtra("giangvien") &&
+                getIntent().hasExtra("phong") &&
+                getIntent().hasExtra("tiet") &&
+                getIntent().hasExtra("diadiem")) {
 
             id = getIntent().getIntExtra("id", 0);
             mon = getIntent().getStringExtra("mon");

@@ -1,5 +1,5 @@
 package com.example.btl_android.thong_bao;
- 
+
 /**
  * @noinspection ALL
  */

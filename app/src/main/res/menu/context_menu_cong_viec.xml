@@ -4,7 +4,7 @@
         android:id="@+id/congviec_edit"
         android:orderInCategory="101"
         android:title="Sửa" />
-    <item 
+    <item
         android:id="@+id/congviec_delete"
         android:orderInCategory="102"
         android:title="Xóa" />

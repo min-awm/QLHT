@@ -1,5 +1,5 @@
 package com.example.btl_android.dang_nhap;
- 
+
 public class MiniTimeTable {
     String tenMonHoc;
     String tietHoc;

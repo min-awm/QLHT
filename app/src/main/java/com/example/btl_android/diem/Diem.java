@@ -1,5 +1,5 @@
 package com.example.btl_android.diem;
- 
+
 import com.example.btl_android.hoc_phan_du_kien.HocPhan;
 
 /**
