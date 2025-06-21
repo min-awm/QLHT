@@ -231,7 +231,7 @@
                         android:weightSum="4">
 
                         <LinearLayout
-                            android:id="@+id/btnKhac"
+                            android:id="@+id/btnChatAi"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginHorizontal="20px"
@@ -246,13 +246,13 @@
                                 android:layout_height="60dp"
                                 android:layout_gravity="center"
                                 android:paddingTop="20px"
-                                app:srcCompat="@drawable/another" />
+                                app:srcCompat="@drawable/customer_service" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="Khác"
+                                android:text="Chatbot"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
                                 android:textStyle="bold" />

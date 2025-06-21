@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.btl_android.DatabaseHelper;
 import com.example.btl_android.R;
+import com.example.btl_android.chat_ai.ChatAiActivity;
 import com.example.btl_android.cong_viec.CongViec;
 import com.example.btl_android.cong_viec.CongViecActivity;
 import com.example.btl_android.diem.DiemActivity;
@@ -38,7 +39,7 @@ import java.util.Date;
  */
 public class TrangChuActivity extends AppCompatActivity {
 
-    LinearLayout btnCongViec, btnHocPhan, btnDiem, btnLichHoc;
+    LinearLayout btnCongViec, btnHocPhan, btnDiem, btnLichHoc, btnChatAi;
     ImageView btnThongBao;
     BroadcastReceiver receiver;
     ListView lvCongViec;
@@ -66,6 +67,7 @@ public class TrangChuActivity extends AppCompatActivity {
         btnDiem = findViewById(R.id.btnDiem);
         btnThongBao = findViewById(R.id.imgThongBao);
         btnLichHoc = findViewById(R.id.btnLichHoc);
+        btnChatAi = findViewById(R.id.btnChatAi);
         txtUserName = findViewById(R.id.txtUsername);
         txtUserName.setText(getIntent().getStringExtra("TenSv"));
 
@@ -109,6 +111,11 @@ public class TrangChuActivity extends AppCompatActivity {
             Intent intent = new Intent(TrangChuActivity.this, ThongBaoActivity.class);
             intent.putExtra("MaSv", getIntent().getStringExtra("MaSv"));
             startActivityForResult(intent, 1);
+        });
+
+        btnChatAi.setOnClickListener(v -> {
+            Intent intent = new Intent(TrangChuActivity.this, ChatAiActivity.class);
+            startActivity(intent);
         });
     }
 
