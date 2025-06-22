@@ -897,4 +897,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return maxId;
     }
+
+    public String getAllData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        StringBuilder allData = new StringBuilder();
+
+        Cursor tableCursor = db.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'", null);
+
+        if (tableCursor.moveToFirst()) {
+            do {
+                String tableName = tableCursor.getString(0);
+                allData.append("Bảng: ").append(tableName).append("\n");
+
+                Cursor dataCursor = db.rawQuery("SELECT * FROM " + tableName, null);
+
+                if (dataCursor.moveToFirst()) {
+                    do {
+                        StringBuilder rowData = new StringBuilder();
+                        for (int i = 0; i < dataCursor.getColumnCount(); i++) {
+                            String columnName = dataCursor.getColumnName(i);
+                            String value = dataCursor.getString(i);
+                            rowData.append(columnName).append(": ").append(value).append(" | ");
+                        }
+                        allData.append(rowData.toString()).append("\n");
+                    } while (dataCursor.moveToNext());
+                } else {
+                    allData.append("Không có dữ liệu\n");
+                }
+                dataCursor.close();
+
+            } while (tableCursor.moveToNext());
+        } else {
+            allData.append("Không tìm thấy bảng nào trong database.\n");
+        }
+        tableCursor.close();
+
+        return allData.toString();
+    }
 }

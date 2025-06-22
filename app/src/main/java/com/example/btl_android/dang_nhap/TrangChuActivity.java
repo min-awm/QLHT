@@ -115,6 +115,7 @@ public class TrangChuActivity extends AppCompatActivity {
 
         btnChatAi.setOnClickListener(v -> {
             Intent intent = new Intent(TrangChuActivity.this, ChatAiActivity.class);
+            intent.putExtra("MaSv", getIntent().getStringExtra("MaSv"));
             startActivity(intent);
         });
     }

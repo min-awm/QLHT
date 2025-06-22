@@ -48,7 +48,7 @@ public class TimeTable extends AppCompatActivity {
             return insets;
         });
 
-        Toolbar toolbar = findViewById(R.id.toolbar_chat);
+        Toolbar toolbar = findViewById(R.id.toolbar_lichhoc);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
